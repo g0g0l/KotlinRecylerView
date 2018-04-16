@@ -1,10 +1,12 @@
 package com.example.bibaswann.infinitescrolling
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -14,8 +16,9 @@ class MainActivity : AppCompatActivity() {
     var pastVisiblesItems: Int = 0
     var visibleItemCount: Int = 0
     var totalItemCount: Int = 0
+    var loading: Boolean = false
 
-    lateinit var adapter:RecyclerAdapter
+    lateinit var adapter: RecyclerAdapter
     lateinit var items: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +45,21 @@ class MainActivity : AppCompatActivity() {
                     totalItemCount = mLayoutManager.itemCount
                     pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition()
                     if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
-                        for (i in totalItemCount+1..totalItemCount+10) {
-                            items.add("Item: $i")
+                        //Probably here make a network call to add more data
+                        if (!loading) {
+                            //This will prevent loading when already is loading
+                            //Otherwise there might be problem with order
+                            loading = true
+                            progressBar.visibility = View.VISIBLE
+                            Handler().postDelayed({
+                                for (i in totalItemCount + 1..totalItemCount + 10) {
+                                    items.add("Item: $i")
+                                }
+                                adapter.notifyDataSetChanged()
+                                progressBar.visibility = View.GONE
+                                loading = false
+                            }, 1000)
                         }
-                        adapter.notifyDataSetChanged()
                     }
                 }
             }
@@ -58,8 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getNewItems()
-    {
+    fun getNewItems() {
         items.clear()
         for (i in 1..10) {
             items.add("New Item: $i")
