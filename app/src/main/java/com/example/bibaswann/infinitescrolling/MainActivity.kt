@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -26,8 +27,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        var mLayoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false);
-        rvMain.layoutManager = mLayoutManager;
+        var mLayoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+        rvMain.layoutManager = mLayoutManager
 
 
         items = ArrayList<String>()
@@ -35,7 +36,13 @@ class MainActivity : AppCompatActivity() {
             items.add("Item: $i")
         }
 
-        adapter = RecyclerAdapter(items)
+        //This is how to implement anonymous class in Kotlin
+        adapter = RecyclerAdapter(items, object : RecyclerAdapter.MyOnClickListener {
+            override fun onClick(inputData: String) {
+                //this@MainActivity is equivalent to MainActivity.this in Java
+                Toast.makeText(this@MainActivity, "You clicked $inputData", Toast.LENGTH_LONG).show()
+            }
+        })
         rvMain.adapter = adapter
 
         rvMain.addOnScrollListener(object : RecyclerView.OnScrollListener() {
