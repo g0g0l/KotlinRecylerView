@@ -19,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     var totalItemCount: Int = 0
     var loading: Boolean = false
 
+    val shownInOneScreen=20
+
     lateinit var adapter: RecyclerAdapter
     lateinit var items: ArrayList<String>
 
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
 
         items = ArrayList<String>()
-        for (i in 1..10) {
+        for (i in 1..shownInOneScreen) {
             items.add("Item: $i")
         }
 
@@ -55,11 +57,11 @@ class MainActivity : AppCompatActivity() {
                         //Probably here make a network call to add more data
                         if (!loading) {
                             //This will prevent loading when already is loading
-                            //Otherwise there might be problem with order
+                            //Otherwise there might be problem with ordering of items
                             loading = true
                             progressBar.visibility = View.VISIBLE
                             Handler().postDelayed({
-                                for (i in totalItemCount + 1..totalItemCount + 10) {
+                                for (i in totalItemCount + 1..totalItemCount + shownInOneScreen) {
                                     items.add("Item: $i")
                                 }
                                 adapter.notifyDataSetChanged()

@@ -30,8 +30,8 @@ class RecyclerAdapter(val numberList: ArrayList<String>, val myOnClickListener: 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindItems(string: String, myOnClickListener: MyOnClickListener) {
-            val tvSerial = itemView.findViewById(R.id.tvSerial) as TextView
-            val button = itemView.findViewById(R.id.button) as Button
+            val tvSerial: TextView = itemView.findViewById(R.id.tvSerial)
+            val button: TextView = itemView.findViewById(R.id.button)
             tvSerial.text = string
 
             button.setOnClickListener { myOnClickListener.onClick(string) }
